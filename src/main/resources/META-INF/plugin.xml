@@ -1,0 +1,79 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+
+    <id>com.loglens.LogLens</id>
+    <name>LogLens</name>
+    <vendor url="https://github.com/loglens">LogLens</vendor>
+
+    <description><![CDATA[
+        <b>LogLens</b> — Smart Android logging assistant for Java &amp; Kotlin.<br/><br/>
+        Features:<br/>
+        <ul>
+          <li>Live templates: <code>logd</code>, <code>loge</code>, <code>logi</code>, <code>logw</code>, <code>logt</code> — auto-fill <em>ClassName#methodName</em> tags</li>
+          <li>Intention: <em>Normalize log tag</em> — fix a bad tag on the current Log call</li>
+          <li>Action: <em>Normalize All Log Tags in File</em> — bulk-fix every Log call</li>
+          <li>Action: <em>Insert Kotlin Log Wrapper</em> — adds <code>Any.logd/e/i/w</code> extensions</li>
+          <li>Action: <em>Insert Java Log Wrapper (L.java)</em> — generates a lightweight <code>L</code> utility class</li>
+        </ul>
+    ]]></description>
+
+    <!-- Hard dependencies -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+    <depends>org.jetbrains.kotlin</depends>
+
+    <!-- Declare K2-mode compatibility (required for IntelliJ 2025.1+ / Android Studio Narwhal+) -->
+    <extensions defaultExtensionNs="org.jetbrains.kotlin">
+        <supportsKotlinPluginMode supportsK2="true"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+
+        <!-- ── Live templates ─────────────────────────────────────────────── -->
+        <defaultLiveTemplates file="/templates/LogLens.xml"/>
+
+        <!-- ── Live template macros ───────────────────────────────────────── -->
+        <liveTemplateMacro implementation="com.loglens.macro.LogTagMacro"/>
+        <liveTemplateMacro implementation="com.loglens.macro.LogClassNameMacro"/>
+        <liveTemplateMacro implementation="com.loglens.macro.SmartDefaultMessageMacro"/>
+
+        <!-- ── Intention action ───────────────────────────────────────────── -->
+        <!-- Registered once — isAvailable() handles Java/Kotlin file detection internally -->
+        <intentionAction>
+            <className>com.loglens.intentions.NormalizeLogTagIntention</className>
+            <category>LogLens</category>
+        </intentionAction>
+
+    </extensions>
+
+    <actions>
+
+        <!-- ── Normalize ALL logs in file ─────────────────────────────────── -->
+        <action id="LogLens.NormalizeAllLogs"
+                class="com.loglens.actions.NormalizeAllLogTagsAction"
+                text="Normalize All Log Tags in File"
+                description="Rewrites every Log.d/e/i/w/v tag with ClassName#methodName">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+
+        <!-- ── LogLens submenu in editor right-click ──────────────────────── -->
+        <group id="LogLens.WrapperGroup"
+               text="LogLens Generators"
+               description="LogLens wrapper code generators"
+               popup="true">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+
+            <action id="LogLens.KotlinWrapper"
+                    class="com.loglens.actions.KotlinWrapperGeneratorAction"
+                    text="Insert Kotlin Log Wrapper"
+                    description="Inserts Any.logd/e/i/w extension functions at top of file"/>
+
+            <action id="LogLens.JavaWrapper"
+                    class="com.loglens.actions.JavaWrapperGeneratorAction"
+                    text="Insert Java Log Wrapper (L.java)"
+                    description="Creates L.java utility class in the current package"/>
+        </group>
+
+    </actions>
+
+</idea-plugin>
