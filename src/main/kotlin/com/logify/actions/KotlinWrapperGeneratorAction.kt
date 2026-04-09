@@ -28,6 +28,8 @@ class KotlinWrapperGeneratorAction : AnAction("Insert Kotlin Log Wrapper") {
         val ktFile  = e.getData(CommonDataKeys.PSI_FILE) as? KtFile ?: return
         val doc     = PsiDocumentManager.getInstance(project).getDocument(ktFile) ?: return
 
+        if (ktFile.text.contains("// ── Logify wrappers")) return
+
         WriteCommandAction.runWriteCommandAction(project, "Insert Kotlin Log Wrapper", null, {
             try {
                 val insertOffset = insertionOffset(ktFile)
