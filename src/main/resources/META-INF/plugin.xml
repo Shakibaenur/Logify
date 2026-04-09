@@ -50,7 +50,8 @@
     <extensions defaultExtensionNs="com.intellij">
 
         <!-- ── Live templates ─────────────────────────────────────────────── -->
-        <defaultLiveTemplates file="/templates/Logify.xml"/>
+        <defaultLiveTemplates file="/templates/LogifyKotlin.xml"/>
+        <defaultLiveTemplates file="/templates/LogifyJava.xml"/>
 
         <!-- ── Live template macros ───────────────────────────────────────── -->
         <liveTemplateMacro implementation="com.logify.macro.LogTagMacro"/>

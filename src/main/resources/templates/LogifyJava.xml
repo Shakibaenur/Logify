@@ -1,0 +1,156 @@
+<templateSet group="Logify">
+
+    <template name="logt"
+              value="private static final String TAG = &quot;$CLASS_NAME$&quot;;"
+              description="[Logify] TAG (class name)">
+        <variable name="CLASS_NAME" expression="logClassNameMacro()" alwaysStopAt="false"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="logd"
+              value="Log.d(&quot;$TAG$&quot;, &quot;$MESSAGE$&quot;$END$);"
+              description="[Logify] Debug log">
+        <variable name="TAG" expression="logTagMacro()" alwaysStopAt="false"/>
+        <variable name="MESSAGE" expression="smartDefaultMessageMacro()" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="loge"
+              value="Log.e(&quot;$TAG$&quot;, &quot;$MESSAGE$&quot;$END$);"
+              description="[Logify] Error log">
+        <variable name="TAG" expression="logTagMacro()" alwaysStopAt="false"/>
+        <variable name="MESSAGE" expression="" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="logi"
+              value="Log.i(&quot;$TAG$&quot;, &quot;$MESSAGE$&quot;$END$);"
+              description="[Logify] Info log">
+        <variable name="TAG" expression="logTagMacro()" alwaysStopAt="false"/>
+        <variable name="MESSAGE" expression="" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="logw"
+              value="Log.w(&quot;$TAG$&quot;, &quot;$MESSAGE$&quot;$END$);"
+              description="[Logify] Warning log">
+        <variable name="TAG" expression="logTagMacro()" alwaysStopAt="false"/>
+        <variable name="MESSAGE" expression="" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="logok"
+              value="Log.d(&quot;$TAG$&quot;, &quot;✅ $MESSAGE$&quot;);"
+              description="[Logify] Success log">
+        <variable name="TAG" expression="logTagMacro()" alwaysStopAt="false"/>
+        <variable name="MESSAGE" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="logerr"
+              value="Log.e(&quot;$TAG$&quot;, &quot;❌ error: $MESSAGE$&quot;);"
+              description="[Logify] Error with emoji">
+        <variable name="TAG" expression="logTagMacro()"/>
+        <variable name="MESSAGE" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="logdata"
+              value="Log.d(&quot;$TAG$&quot;, &quot;📦 $MESSAGE$&quot;);"
+              description="[Logify] Data log">
+        <variable name="TAG" expression="logTagMacro()"/>
+        <variable name="MESSAGE" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="logvar"
+              value="Log.d(&quot;$TAG$&quot;, &quot;$VAR$=&quot; + $VAR$);"
+              description="[Logify] Log nearest variable"
+              toReformat="true" toShortenFQNames="true">
+        <variable name="TAG" expression="logTagMacro()" defaultValue="&quot;TAG&quot;" alwaysStopAt="false"/>
+        <variable name="VAR" expression="nearestVariableMacro()" defaultValue="&quot;value&quot;" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="logtime"
+              value="long __startTime = System.currentTimeMillis();&#10;$END$&#10;Log.d(&quot;$TAG$&quot;, &quot;⏱️ took &quot; + (System.currentTimeMillis() - __startTime) + &quot;ms&quot;);"
+              description="[Logify] Timing block">
+        <variable name="TAG" expression="logTagMacro()"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="logtry"
+              value="try {&#10;    $END$&#10;} catch (Exception e) {&#10;    Log.e(&quot;$TAG$&quot;, &quot;❌ error: &quot; + e.getMessage(), e);&#10;}"
+              description="[Logify] Try-catch with error log">
+        <variable name="TAG" expression="logTagMacro()"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="logflow"
+              value="Log.d(&quot;$TAG$&quot;, &quot;🌊 thread=&quot; + Thread.currentThread().getName());"
+              description="[Logify] Thread log">
+        <variable name="TAG" expression="logTagMacro()"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="lognavto"
+              value="Log.d(&quot;$TAG$&quot;, &quot;🧭 navigating to: $DEST$&quot;);"
+              description="[Logify] Navigation log">
+        <variable name="TAG" expression="logTagMacro()"/>
+        <variable name="DEST" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="loglogin"
+              value="Log.d(&quot;$TAG$&quot;, &quot;🔐 login user=&quot; + $USER$);"
+              description="[Logify] Auth log">
+        <variable name="TAG" expression="logTagMacro()"/>
+        <variable name="USER" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="logquery"
+              value="Log.d(&quot;$TAG$&quot;, &quot;🗄️ QUERY: $QUERY$&quot;);"
+              description="[Logify] Database query log">
+        <variable name="TAG" expression="logTagMacro()"/>
+        <variable name="QUERY" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="td"
+              value="Timber.d(&quot;$MESSAGE$&quot;$END$);"
+              description="[Logify] Timber debug log">
+        <variable name="MESSAGE" expression="smartDefaultMessageMacro()" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="te"
+              value="Timber.e(&quot;$MESSAGE$&quot;$END$);"
+              description="[Logify] Timber error log">
+        <variable name="MESSAGE" expression="" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="ti"
+              value="Timber.i(&quot;$MESSAGE$&quot;$END$);"
+              description="[Logify] Timber info log">
+        <variable name="MESSAGE" expression="" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="tw"
+              value="Timber.w(&quot;$MESSAGE$&quot;$END$);"
+              description="[Logify] Timber warning log">
+        <variable name="MESSAGE" expression="" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+    <template name="tvar"
+              value="Timber.d(&quot;$VAR$=%s&quot;, $VAR$);"
+              description="[Logify] Timber log nearest variable"
+              toReformat="true" toShortenFQNames="true">
+        <variable name="VAR" expression="nearestVariableMacro()" defaultValue="&quot;value&quot;" alwaysStopAt="true"/>
+        <context><option name="JAVA_STATEMENT" value="true"/></context>
+    </template>
+
+</templateSet>
