@@ -1,4 +1,4 @@
-package com.loglens.macro
+package com.logify.macro
 
 import com.intellij.codeInsight.template.*
 import com.intellij.codeInsight.template.macro.MacroBase

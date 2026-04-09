@@ -1,4 +1,4 @@
-package com.loglens.actions
+package com.logify.actions
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -9,8 +9,8 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiLiteralExpression
 import com.intellij.psi.PsiMethodCallExpression
 import com.intellij.psi.util.PsiTreeUtil
-import com.loglens.intentions.NormalizeLogTagIntention.Companion.LOG_METHODS
-import com.loglens.utils.PsiUtils
+import com.logify.intentions.NormalizeLogTagIntention.Companion.LOG_METHODS
+import com.logify.utils.PsiUtils
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression

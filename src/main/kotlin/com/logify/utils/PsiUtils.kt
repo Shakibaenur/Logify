@@ -1,4 +1,4 @@
-package com.loglens.utils
+package com.logify.utils
 
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement

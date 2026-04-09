@@ -1,4 +1,4 @@
-package com.loglens.actions
+package com.logify.actions
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -45,7 +45,7 @@ class KotlinWrapperGeneratorAction : AnAction("Insert Kotlin Log Wrapper") {
         private val WRAPPER_CODE = """
 
 
-// ── LogLens wrappers ──────────────────────────────────────────────────────────
+// ── Logify wrappers ──────────────────────────────────────────────────────────
 fun Any.logd(message: String) {
     android.util.Log.d(this::class.simpleName ?: "Unknown", message)
 }

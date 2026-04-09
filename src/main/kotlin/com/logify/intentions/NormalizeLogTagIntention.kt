@@ -1,4 +1,4 @@
-package com.loglens.intentions
+package com.logify.intentions
 
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
 import com.intellij.openapi.editor.Editor
@@ -9,7 +9,7 @@ import com.intellij.psi.PsiExpressionList
 import com.intellij.psi.PsiLiteralExpression
 import com.intellij.psi.PsiMethodCallExpression
 import com.intellij.psi.PsiReferenceExpression
-import com.loglens.utils.PsiUtils
+import com.logify.utils.PsiUtils
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 class NormalizeLogTagIntention : PsiElementBaseIntentionAction() {
 
     override fun getText(): String = "Normalize log tag"
-    override fun getFamilyName(): String = "LogLens"
+    override fun getFamilyName(): String = "Logify"
 
     // ── Availability ─────────────────────────────────────────────────────────
 

@@ -1,1 +1,1 @@
-rootProject.name = "LogLens"
+rootProject.name = "Logify"

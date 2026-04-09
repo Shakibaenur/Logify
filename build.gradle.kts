@@ -4,8 +4,8 @@ plugins {
     id("org.jetbrains.intellij.platform") version "2.7.1"
 }
 
-group = "com.loglens"
-version = "1.0-SNAPSHOT"
+group = "com.logify"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -39,9 +39,17 @@ intellijPlatform {
             1.0 – Initial release
             • Live templates: logd / loge / logi / logw / logt (Java &amp; Kotlin)
             • Intention: Normalize log tag
+            • Intention: Log This — wrap any expression in a log call instantly
             • Bulk action: Normalize All Log Tags in File
-            • Generator: Insert Kotlin Log Wrapper
-            • Generator: Insert Java Log Wrapper (L.java)
+            • Generator: Insert Kotlin Log Wrapper (Any.logd/e/i/w extensions)
+            • Generator: Insert Java Log Wrapper (L.java utility class)
+            • Inspection: Unguarded Log call — warns on Log.* not wrapped in BuildConfig.DEBUG (Java &amp; Kotlin)
+            • Inspection: Sensitive data in log call — detects passwords/tokens/secrets in log arguments (Java &amp; Kotlin)
+            • Inspection: Log call should use Timber — opt-in warning to migrate from Log to Timber (Java &amp; Kotlin)
+            • Action: Wrap All Unguarded Logs in Project — bulk-fix every unguarded Log call
+            • Action: Check Release Readiness — project-wide scan for debug logs, unguarded logs, and sensitive data leaks
+            • Action: Convert All Log Calls to Timber — replaces every Log.d/e/i/w/v with the equivalent Timber call
+            • Action: Remove Debug Log Calls — deletes all Log.d/i/v and Timber.d/i/v calls project-wide
         """.trimIndent()
     }
 }

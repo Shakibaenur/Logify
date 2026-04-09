@@ -1,19 +1,39 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
 
-    <id>com.loglens.LogLens</id>
-    <name>LogLens</name>
-    <vendor url="https://github.com/loglens">LogLens</vendor>
+    <id>com.logify.Logify</id>
+    <name>Logify</name>
+    <vendor url="https://github.com/Shakibaenur/Logify">Shakibaenur</vendor>
 
     <description><![CDATA[
-        <b>LogLens</b> — Smart Android logging assistant for Java &amp; Kotlin.<br/><br/>
-        Features:<br/>
+        <b>Logify</b> — Smart Android logging assistant for Java &amp; Kotlin.<br/><br/>
+        <b>Live Templates</b><br/>
         <ul>
-          <li>Live templates: <code>logd</code>, <code>loge</code>, <code>logi</code>, <code>logw</code>, <code>logt</code> — auto-fill <em>ClassName#methodName</em> tags</li>
-          <li>Intention: <em>Normalize log tag</em> — fix a bad tag on the current Log call</li>
-          <li>Action: <em>Normalize All Log Tags in File</em> — bulk-fix every Log call</li>
-          <li>Action: <em>Insert Kotlin Log Wrapper</em> — adds <code>Any.logd/e/i/w</code> extensions</li>
-          <li>Action: <em>Insert Java Log Wrapper (L.java)</em> — generates a lightweight <code>L</code> utility class</li>
+          <li><code>logd</code>, <code>loge</code>, <code>logi</code>, <code>logw</code>, <code>logt</code> — auto-fill <em>ClassName#methodName</em> tags in Java &amp; Kotlin</li>
+        </ul>
+        <b>Intentions</b><br/>
+        <ul>
+          <li><em>Normalize log tag</em> — fix a bad tag on the current Log call</li>
+          <li><em>Log This</em> — instantly wrap any expression in a log call</li>
+        </ul>
+        <b>Inspections</b><br/>
+        <ul>
+          <li><em>Unguarded Log call</em> — warns on any <code>Log.*</code> not wrapped in <code>if (BuildConfig.DEBUG)</code>, with a one-click fix</li>
+          <li><em>Sensitive data in log call</em> — detects passwords, tokens, and secrets passed to log calls</li>
+          <li><em>Log call should use Timber</em> — opt-in warning to migrate from <code>android.util.Log</code> to Timber</li>
+        </ul>
+        <b>Actions (Editor right-click)</b><br/>
+        <ul>
+          <li><em>Normalize All Log Tags in File</em> — bulk-fix every Log call in the current file</li>
+          <li><em>Insert Kotlin Log Wrapper</em> — adds <code>Any.logd/e/i/w</code> extension functions</li>
+          <li><em>Insert Java Log Wrapper (L.java)</em> — generates a lightweight <code>L</code> utility class</li>
+        </ul>
+        <b>Actions (Tools menu)</b><br/>
+        <ul>
+          <li><em>Wrap All Unguarded Logs in Project</em> — bulk-wraps every unguarded Log call with <code>if (BuildConfig.DEBUG)</code></li>
+          <li><em>Check Release Readiness</em> — project-wide scan for debug logs, unguarded logs, and sensitive data leaks</li>
+          <li><em>Convert All Log Calls to Timber</em> — replaces every <code>Log.d/e/i/w/v</code> with the equivalent Timber call</li>
+          <li><em>Remove Debug Log Calls</em> — deletes all <code>Log.d/i/v</code> and <code>Timber.d/i/v</code> calls project-wide</li>
         </ul>
     ]]></description>
 
@@ -30,49 +50,136 @@
     <extensions defaultExtensionNs="com.intellij">
 
         <!-- ── Live templates ─────────────────────────────────────────────── -->
-        <defaultLiveTemplates file="/templates/LogLens.xml"/>
+        <defaultLiveTemplates file="/templates/Logify.xml"/>
 
         <!-- ── Live template macros ───────────────────────────────────────── -->
-        <liveTemplateMacro implementation="com.loglens.macro.LogTagMacro"/>
-        <liveTemplateMacro implementation="com.loglens.macro.LogClassNameMacro"/>
-        <liveTemplateMacro implementation="com.loglens.macro.SmartDefaultMessageMacro"/>
+        <liveTemplateMacro implementation="com.logify.macro.LogTagMacro"/>
+        <liveTemplateMacro implementation="com.logify.macro.LogClassNameMacro"/>
+        <liveTemplateMacro implementation="com.logify.macro.LogVariableMacro"/>
+        <liveTemplateMacro implementation="com.logify.macro.SmartDefaultMessageMacro"/>
 
-        <!-- ── Intention action ───────────────────────────────────────────── -->
+        <!-- ── Intention actions ─────────────────────────────────────────── -->
         <!-- Registered once — isAvailable() handles Java/Kotlin file detection internally -->
         <intentionAction>
-            <className>com.loglens.intentions.NormalizeLogTagIntention</className>
-            <category>LogLens</category>
+            <className>com.logify.intentions.NormalizeLogTagIntention</className>
+            <category>Logify</category>
         </intentionAction>
+        <intentionAction>
+            <className>com.logify.intentions.LogThisIntention</className>
+            <category>Logify</category>
+        </intentionAction>
+
+        <!-- ── Inspections ────────────────────────────────────────────────── -->
+        <localInspection
+            language="JAVA"
+            shortName="UnguardedLog"
+            displayName="Unguarded Log call"
+            groupName="Logify"
+            enabledByDefault="true"
+            level="WARNING"
+            implementationClass="com.logify.inspections.UnguardedLogInspection"/>
+        <localInspection
+            language="kotlin"
+            shortName="UnguardedLogKotlin"
+            displayName="Unguarded Log call"
+            groupName="Logify"
+            enabledByDefault="true"
+            level="WARNING"
+            implementationClass="com.logify.inspections.UnguardedLogInspection"/>
+        <localInspection
+            language="JAVA"
+            shortName="SensitiveDataInLog"
+            displayName="Sensitive data in log call"
+            groupName="Logify"
+            enabledByDefault="true"
+            level="WARNING"
+            implementationClass="com.logify.inspections.SensitiveDataInLogInspection"/>
+        <localInspection
+            language="kotlin"
+            shortName="SensitiveDataInLogKotlin"
+            displayName="Sensitive data in log call"
+            groupName="Logify"
+            enabledByDefault="true"
+            level="WARNING"
+            implementationClass="com.logify.inspections.SensitiveDataInLogInspection"/>
+        <localInspection
+            language="JAVA"
+            shortName="UseTimberInsteadOfLog"
+            displayName="Log call should use Timber"
+            groupName="Logify"
+            enabledByDefault="false"
+            level="WARNING"
+            implementationClass="com.logify.inspections.TimberInspection"/>
+        <localInspection
+            language="kotlin"
+            shortName="UseTimberInsteadOfLogKotlin"
+            displayName="Log call should use Timber"
+            groupName="Logify"
+            enabledByDefault="false"
+            level="WARNING"
+            implementationClass="com.logify.inspections.TimberInspection"/>
 
     </extensions>
 
     <actions>
 
         <!-- ── Normalize ALL logs in file ─────────────────────────────────── -->
-        <action id="LogLens.NormalizeAllLogs"
-                class="com.loglens.actions.NormalizeAllLogTagsAction"
+        <action id="Logify.NormalizeAllLogs"
+                class="com.logify.actions.NormalizeAllLogTagsAction"
                 text="Normalize All Log Tags in File"
                 description="Rewrites every Log.d/e/i/w/v tag with ClassName#methodName">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
 
-        <!-- ── LogLens submenu in editor right-click ──────────────────────── -->
-        <group id="LogLens.WrapperGroup"
-               text="LogLens Generators"
-               description="LogLens wrapper code generators"
+        <!-- ── Logify submenu in editor right-click ──────────────────────── -->
+        <group id="Logify.WrapperGroup"
+               text="Logify Generators"
+               description="Logify wrapper code generators"
                popup="true">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
 
-            <action id="LogLens.KotlinWrapper"
-                    class="com.loglens.actions.KotlinWrapperGeneratorAction"
+            <action id="Logify.KotlinWrapper"
+                    class="com.logify.actions.KotlinWrapperGeneratorAction"
                     text="Insert Kotlin Log Wrapper"
                     description="Inserts Any.logd/e/i/w extension functions at top of file"/>
 
-            <action id="LogLens.JavaWrapper"
-                    class="com.loglens.actions.JavaWrapperGeneratorAction"
+            <action id="Logify.JavaWrapper"
+                    class="com.logify.actions.JavaWrapperGeneratorAction"
                     text="Insert Java Log Wrapper (L.java)"
                     description="Creates L.java utility class in the current package"/>
         </group>
+
+        <!-- ── Release readiness check ───────────────────────────────────── -->
+        <action id="Logify.ReleaseReadiness"
+                class="com.logify.actions.ReleaseReadinessAction"
+                text="Check Release Readiness"
+                description="Scans the project for debug logs, unguarded logs, and sensitive data leaks">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
+        <!-- ── Convert all Log calls to Timber ───────────────────────────── -->
+        <action id="Logify.ConvertLogToTimber"
+                class="com.logify.actions.ConvertLogToTimberAction"
+                text="Convert All Log Calls to Timber"
+                description="Replaces every Log.d/e/i/w/v call in the project with the equivalent Timber call">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
+        <!-- ── Remove debug log calls ────────────────────────────────────── -->
+        <action id="Logify.RemoveDebugLogs"
+                class="com.logify.actions.RemoveDebugLogsAction"
+                text="Remove Debug Log Calls"
+                description="Deletes all Log.d/i/v and Timber.d/i/v calls project-wide. Keeps Log.e and Log.w.">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
+        <!-- ── Wrap all unguarded logs in project ─────────────────────────── -->
+        <action id="Logify.WrapAllUnguardedLogs"
+                class="com.logify.actions.WrapAllUnguardedLogsAction"
+                text="Wrap All Unguarded Logs in Project"
+                description="Wraps every unguarded Log call in the project with if (BuildConfig.DEBUG)">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
 
     </actions>
 
