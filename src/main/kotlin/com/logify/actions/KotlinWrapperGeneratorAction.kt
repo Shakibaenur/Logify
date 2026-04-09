@@ -1,5 +1,6 @@
 package com.logify.actions
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
@@ -14,6 +15,8 @@ import org.jetbrains.kotlin.psi.KtFile
  * Insertion point: right after the last import (or package declaration).
  */
 class KotlinWrapperGeneratorAction : AnAction("Insert Kotlin Log Wrapper") {
+
+    override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
     override fun update(e: AnActionEvent) {
         e.presentation.isEnabledAndVisible =

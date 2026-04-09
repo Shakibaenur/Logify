@@ -1,5 +1,6 @@
 package com.logify.actions
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
@@ -22,6 +23,8 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * each tag becomes "ClassName#methodName".  Works for both Java and Kotlin files.
  */
 class NormalizeAllLogTagsAction : AnAction("Normalize All Log Tags in File") {
+
+    override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
     override fun update(e: AnActionEvent) {
         val name = e.getData(CommonDataKeys.PSI_FILE)?.name ?: ""

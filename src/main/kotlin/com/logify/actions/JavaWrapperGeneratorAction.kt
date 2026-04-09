@@ -1,6 +1,7 @@
 package com.logify.actions
 
 import com.intellij.lang.java.JavaLanguage
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
@@ -15,6 +16,8 @@ import com.intellij.psi.PsiJavaFile
  * directory as the current file.  If L.java already exists it is opened instead.
  */
 class JavaWrapperGeneratorAction : AnAction("Insert Java Log Wrapper (L.java)") {
+
+    override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
     override fun update(e: AnActionEvent) {
         e.presentation.isEnabledAndVisible =
