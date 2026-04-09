@@ -29,6 +29,12 @@ dependencies {
 }
 
 intellijPlatform {
+    pluginVerification {
+        ides {
+            ide("IC", "2025.1.4.1")
+        }
+    }
+
     pluginConfiguration {
         ideaVersion {
             sinceBuild = "251"
